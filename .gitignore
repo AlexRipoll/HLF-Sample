@@ -1,1 +1,5 @@
 .idea/
+fabric-samples/
+network/system-genesis-block/genesis.block/
+network/organizations/ordererOrganizations/
+network/organizations/peerOrganizations/
