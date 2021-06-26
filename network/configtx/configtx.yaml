@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+# see file details: https://hyperledger-fabric.readthedocs.io/en/release-2.2/create_channel/create_channel_config.html
 
 ---
 ################################################################################
@@ -161,6 +162,11 @@ Capabilities:
 #   - This section defines the values to encode into a config transaction or
 #   genesis block for application related parameters
 #
+#   The application section defines the policies that govern how peer organizations can interact with application
+#   channels. These policies govern the number of peer organizations that need to approve a chaincode definition or
+#   sign a request to update the channel configuration. These policies are also used to restrict access to channel
+#   resources, such as the ability to write to the channel ledger or to query channel events.
+#
 ################################################################################
 Application: &ApplicationDefaults
 
@@ -301,7 +307,7 @@ Channel: &ChannelDefaults
 ################################################################################
 Profiles:
 
-    TwoOrgsApplicationGenesis:
+    TwoOrgsOrdererGenesis:
         <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
@@ -309,6 +315,22 @@ Profiles:
                 - *OrdererOrg
             Capabilities:
                 <<: *OrdererCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Org1
+                    - *Org2
+#        Application:
+#            <<: *ApplicationDefaults
+#            Organizations:
+#                - *Org1
+#                - *Org2
+#            Capabilities:
+#                <<: *ApplicationCapabilities
+
+    TwoOrgsChannel:
+        Consortium: SampleConsortium
+        <<: *ChannelDefaults
         Application:
             <<: *ApplicationDefaults
             Organizations:
@@ -316,3 +338,34 @@ Profiles:
                 - *Org2
             Capabilities:
                 <<: *ApplicationCapabilities
+
+#    TwoOrgsApplicationGenesis:
+#        <<: *ChannelDefaults
+#        Orderer:
+#            <<: *OrdererDefaults
+#            Organizations:
+#                - *OrdererOrg
+#            Capabilities:
+#                <<: *OrdererCapabilities
+#        Application:
+#            <<: *ApplicationDefaults
+#            Organizations:
+#                - *Org1
+#                - *Org2
+#            Capabilities:
+#                <<: *ApplicationCapabilities
+#        Consortiums:
+#            TwoOrgsConsortium:
+#                Organizations:
+#                    - *Org1
+#
+#    TwoOrgsChannel:
+#        Consortium: TwoOrgsConsortium
+#        <<: *ChannelDefaults
+#        Application:
+#            <<: *ApplicationDefaults
+#            Organizations:
+#                - *Org1
+#                - *Org2
+#            Capabilities:
+#                <<: *ApplicationCapabilities
